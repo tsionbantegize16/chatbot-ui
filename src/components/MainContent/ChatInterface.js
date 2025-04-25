@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
 
-function ChatInterface() {
+function ChatInterface({ onSendMessage }) {
   const [inputText, setInputText] = useState('');
 
   const handleInputChange = (event) => {
     setInputText(event.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSend = () => {
     if (inputText.trim()) {
-      console.log('User message:', inputText);
-      // In a real application, send this to the backend
+      onSendMessage(inputText); // Send the message to App.js
       setInputText('');
     }
   };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      handleSendMessage();
+      handleSend();
     }
   };
 
@@ -28,7 +27,7 @@ function ChatInterface() {
         <input
           type="text"
           className="flex-1 border rounded-md py-3 px-4 text-gray-700 focus:outline-none focus:ring-coopBlue focus:border-coopBlue"
-          placeholder="Ask your data anything and receive the right insights within seconds..."
+          placeholder="Type your message..."
           value={inputText}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
@@ -37,7 +36,7 @@ function ChatInterface() {
           <span className="text-gray-500 mr-3 text-sm">🔗 Connections</span>
           <button
             className="bg-coopBlue hover:bg-coopBlueHover text-white font-semibold py-3 px-6 rounded-md focus:outline-none focus:ring-coopBlue focus:ring-offset-2 transition duration-200"
-            onClick={handleSendMessage}
+            onClick={handleSend}
           >
             Send
           </button>
