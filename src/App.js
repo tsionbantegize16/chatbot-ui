@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import ChatBubble from './components/ChatBubble'; // Make sure this exists
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const chatContainerRef = useRef(null);
 
   const predefinedResponses = {
     hello: 'Hello!',
@@ -42,6 +43,13 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    // Scroll to the bottom of the chat container whenever messages update
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
       <Sidebar />
@@ -50,12 +58,13 @@ function App() {
           {/* ... header content ... */}
         </header>
         <div className="flex-1 p-8 flex flex-col">
-          <div className="flex-grow overflow-y-auto mb-4">
+        <MainContent onSendMessage={handleSendMessage} /> {/* Pass the send function */}
+          <div className="flex-grow overflow-y-auto mb-4" ref={chatContainerRef}> {/* Add the ref here */}
             {messages.map((msg, index) => (
               <ChatBubble key={index} text={msg.text} isUser={msg.isUser} />
             ))}
           </div>
-          <MainContent onSendMessage={handleSendMessage} /> {/* Pass the send function */}
+          
         </div>
       </div>
     </div>
