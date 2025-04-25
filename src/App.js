@@ -6,15 +6,40 @@ import ChatBubble from './components/ChatBubble'; // Make sure this exists
 function App() {
   const [messages, setMessages] = useState([]);
 
+  const predefinedResponses = {
+    hello: 'Hello!',
+    hi: 'Hi there!',
+    hey: 'Hey!',
+    'how are you?': "I'm good, what about you?",
+    'how are you doing?': "I'm doing well, thank you for asking!",
+    'what\'s up?': 'Not much, just here to help!',
+    'what is up?': 'Same as above!', // Adding a slight variation
+    'how is your day?': "My day is going well, thank you for asking!",
+    'how\'s your day?': "It's going great!",
+    thanks: "You're welcome!",
+    'thank you': "You're very welcome!",
+    bye: 'Goodbye!',
+    goodbye: 'Have a great day!',
+    'see you later': 'See you!',
+    'talk to you later': 'Okay, talk to you later!',
+    'what can you do?': "I can answer simple questions and provide information.",
+    'tell me a joke': "Why don't scientists trust atoms? Because they make up everything!",
+  };
+
   const handleSendMessage = (userMessage) => {
-    // Add the user's message to the chat
     setMessages([...messages, { text: userMessage, isUser: true }]);
 
-    // Simulate a bot response (replace with actual backend logic later)
-    setTimeout(() => {
-      const botResponse = `Bot says: "${userMessage}" received!`;
-      setMessages([...messages, { text: userMessage, isUser: true }, { text: botResponse, isUser: false }]);
-    }, 1000); // Simulate a 1-second delay
+    const lowerCaseMessage = userMessage.toLowerCase().trim(); // Trim whitespace and convert to lowercase
+
+    if (predefinedResponses.hasOwnProperty(lowerCaseMessage)) {
+      setTimeout(() => {
+        setMessages([...messages, { text: userMessage, isUser: true }, { text: predefinedResponses[lowerCaseMessage], isUser: false }]);
+      }, 500); // Slight delay for bot response
+    } else {
+      setTimeout(() => {
+        setMessages([...messages, { text: userMessage, isUser: true }, { text: "Sorry, I don't understand that yet.", isUser: false }]);
+      }, 500);
+    }
   };
 
   return (
